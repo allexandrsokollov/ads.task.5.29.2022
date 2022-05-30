@@ -4,9 +4,6 @@ import vsu.cs.sokolov.util.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class MainForm extends JFrame {
@@ -64,7 +61,7 @@ public class MainForm extends JFrame {
                     SwingUtils.showErrorMessageBox(ex);
                 }
             } else {
-                postOrder(tree.root, new Visitor(0));
+                findHeightOfNode(tree.root, new Height());
                 updateUI();
             }
         });
@@ -72,73 +69,48 @@ public class MainForm extends JFrame {
 
     private void updateUI() {
         paintPanel.repaint();
+        panelPaintArea.repaint();
         panelPaintArea.updateUI();
+        paintPanel.updateUI();
     }
 
-    private void findNodesHeight(SimpleBinaryTree<Integer>.SimpleTreeNode prevNode,
-                                 SimpleBinaryTree<Integer>.SimpleTreeNode node) {
-        node.setValue(0);
-
-        if (prevNode != null && prevNode.value.equals(node.getValue())) {
-            prevNode.setValue(prevNode.value + 1);
-        }
-
-        if (node.left != null) {
-            findNodesHeight(node, node.left);
-        }
-
-        if (node.right != null) {
-            findNodesHeight(node, node.right);
-        }
+    static class Height {
+        int height;
     }
+/*
+1 (2 (3 (4), 5 (1 (2 (3 (4), 5 (, 9 (, 2 (, 3)))), 3 (, 4 (5, 6))), 9 (, 2 (, 3)))), 3 (, 4 (5, 6)))
+*/
+    private void findHeightOfNode(SimpleBinaryTree<Integer>.SimpleTreeNode node, Height height) {
 
-    static class Visitor {
-        int level;
-        int branchMax;
-        int val;
-        LinkedList<SimpleBinaryTree<Integer>.SimpleTreeNode> nodes;
-
-        public Visitor(int level) {
-            this.level = level;
-            branchMax = 0;
-            nodes = new LinkedList<>();
-            val = 0;
-        }
-        void incrementLevels() {
-            for (SimpleBinaryTree<Integer>.SimpleTreeNode node : nodes) {
-                if (node.value < val) {
-                    node.value++;
-                }
-            }
-        }
-    }
-
-
-    private void postOrder(SimpleBinaryTree<Integer>.SimpleTreeNode node, Visitor visitor) {
         if (node != null) {
-           node.setValue(0);
+            node.value = 0;
+            int valueToCompare = 0;
 
-            visitor.nodes.add(node);
-            visitor.val++;
-            visitor.incrementLevels();
+            if (node.right == null && node.left == null) {
+                height.height = 0;
+            }
 
             if (node.left != null) {
-                postOrder(node.left, visitor);
+                findHeightOfNode(node.left, height);
+                height.height++;
+                if (valueToCompare < height.height) {
+                    valueToCompare = height.height;
+                }
             }
-
 
             if (node.right != null) {
-                postOrder(node.right, visitor);
+                findHeightOfNode(node.right, height);
+                height.height++;
+                if (valueToCompare < height.height) {
+                    valueToCompare = height.height;
+                }
             }
 
-            if (!visitor.nodes.isEmpty()) {
-                visitor.nodes.removeLast();
-                visitor.val--;
+            if (valueToCompare > node.value) {
+                node.value = valueToCompare;
             }
+
 
         }
     }
-
-
-
 }
