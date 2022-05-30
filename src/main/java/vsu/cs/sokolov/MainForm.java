@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class MainForm extends JFrame {
     private JTextField textFieldBracketNotationTree;
@@ -63,11 +64,15 @@ public class MainForm extends JFrame {
                     SwingUtils.showErrorMessageBox(ex);
                 }
             } else {
-                findNodesHeight(null, tree.root);
-                paintPanel.repaint();
-                panelPaintArea.updateUI();
+                postOrder(tree.root, new Visitor(0));
+                updateUI();
             }
         });
+    }
+
+    private void updateUI() {
+        paintPanel.repaint();
+        panelPaintArea.updateUI();
     }
 
     private void findNodesHeight(SimpleBinaryTree<Integer>.SimpleTreeNode prevNode,
@@ -84,6 +89,53 @@ public class MainForm extends JFrame {
 
         if (node.right != null) {
             findNodesHeight(node, node.right);
+        }
+    }
+
+    static class Visitor {
+        int level;
+        int branchMax;
+        int val;
+        LinkedList<SimpleBinaryTree<Integer>.SimpleTreeNode> nodes;
+
+        public Visitor(int level) {
+            this.level = level;
+            branchMax = 0;
+            nodes = new LinkedList<>();
+            val = 0;
+        }
+        void incrementLevels() {
+            for (SimpleBinaryTree<Integer>.SimpleTreeNode node : nodes) {
+                if (node.value < val) {
+                    node.value++;
+                }
+            }
+        }
+    }
+
+
+    private void postOrder(SimpleBinaryTree<Integer>.SimpleTreeNode node, Visitor visitor) {
+        if (node != null) {
+           node.setValue(0);
+
+            visitor.nodes.add(node);
+            visitor.val++;
+            visitor.incrementLevels();
+
+            if (node.left != null) {
+                postOrder(node.left, visitor);
+            }
+
+
+            if (node.right != null) {
+                postOrder(node.right, visitor);
+            }
+
+            if (!visitor.nodes.isEmpty()) {
+                visitor.nodes.removeLast();
+                visitor.val--;
+            }
+
         }
     }
 

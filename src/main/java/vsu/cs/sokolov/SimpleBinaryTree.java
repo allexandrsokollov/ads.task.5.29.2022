@@ -15,6 +15,11 @@ public class SimpleBinaryTree<T> implements BinaryTree<T> {
             this.right = right;
         }
 
+        @Override
+        public String toString() {
+            return "\nvalue=" + value;
+        }
+
         public void setValue(T value) {
             this.value = value;
         }

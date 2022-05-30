@@ -3,7 +3,7 @@
   <grid id="27dc6" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="708" height="848"/>
     </constraints>
     <properties>
       <font name="Arial" size="16" style="0"/>
@@ -37,7 +37,7 @@
             </constraints>
             <properties>
               <font name="Arial" size="16"/>
-              <text value="8 (6 (4 (5), 6), 5 (, 5 (2, 8)))"/>
+              <text value="1 (2 (3 (4), 5 (, 9 (, 2 (, 3)))), 3 (, 4 (5, 6)))"/>
             </properties>
           </component>
           <grid id="9a7e4" binding="panelPaintArea" layout-manager="BorderLayout" hgap="0" vgap="0">

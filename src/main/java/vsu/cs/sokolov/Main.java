@@ -7,7 +7,6 @@ public class Main {
         new MainForm();
 
     }
-
     public static String getNextLineFromConsole(String welcomeMessage) {
         System.out.println(welcomeMessage);
         Scanner scanner = new Scanner(System.in);
