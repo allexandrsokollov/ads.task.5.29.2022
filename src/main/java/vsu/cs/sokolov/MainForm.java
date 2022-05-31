@@ -4,7 +4,6 @@ import vsu.cs.sokolov.util.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.LinkedList;
 
 public class MainForm extends JFrame {
     private JTextField textFieldBracketNotationTree;
@@ -12,7 +11,7 @@ public class MainForm extends JFrame {
     private JPanel panelPaintArea;
     private JButton buttonFindHeight;
     private JPanel panelMain;
-    private JPanel paintPanel = null;
+    private final JPanel paintPanel;
 
     SimpleBinaryTree<Integer> tree = new SimpleBinaryTree<>();
 
@@ -61,7 +60,7 @@ public class MainForm extends JFrame {
                     SwingUtils.showErrorMessageBox(ex);
                 }
             } else {
-                findHeightOfNode(tree.root, new Height());
+                findHeightOfNode(tree.root, new Visitor());
                 updateUI();
             }
         });
@@ -74,39 +73,40 @@ public class MainForm extends JFrame {
         paintPanel.updateUI();
     }
 
-    static class Height {
+    static class Visitor {
         int height;
     }
 /*
+Some trees for test:
 1 (2 (3 (4), 5 (1 (2 (3 (4), 5 (, 9 (, 2 (, 3)))), 3 (, 4 (5, 6))), 9 (, 2 (, 3)))), 3 (, 4 (5, 6)))
 1 (2 (, 5 (1 (2 (, 5 (, 9 (, 2 (, 3)))), 3 (, 4 (5, 6))), 9 (, 2 (, 3)))), 3 (, 4 (5, 6)))
 1 (2, 3 (4 (6, 7), 5))
 */
-    private void findHeightOfNode(SimpleBinaryTree<Integer>.SimpleTreeNode node, Height height) {
+    private void findHeightOfNode(SimpleBinaryTree<Integer>.SimpleTreeNode node, Visitor visitor) {
         if (node != null) {
             node.value = 0;
 
             if (node.right == null && node.left == null) {
-                height.height = 0;
+                visitor.height = 0;
             } else {
 
                 if (node.left != null) {
-                    findHeightOfNode(node.left, height);
-                    height.height++;
+                    findHeightOfNode(node.left, visitor);
+                    visitor.height++;
 
-                    if (height.height >= node.value) {
-                        node.value = height.height;
+                    if (visitor.height >= node.value) {
+                        node.value = visitor.height;
                     }
                 }
 
                 if (node.right != null) {
-                    findHeightOfNode(node.right, height);
-                    height.height++;
+                    findHeightOfNode(node.right, visitor);
+                    visitor.height++;
 
-                    if (height.height >= node.value) {
-                        node.value = height.height;
+                    if (visitor.height >= node.value) {
+                        node.value = visitor.height;
                     } else {
-                        height.height = node.value;
+                        visitor.height = node.value;
                     }
                 }
             }
