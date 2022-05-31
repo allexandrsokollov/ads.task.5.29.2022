@@ -20,10 +20,6 @@ public class SimpleBinaryTree<T> implements BinaryTree<T> {
             return "\nvalue=" + value;
         }
 
-        public void setValue(T value) {
-            this.value = value;
-        }
-
         public SimpleTreeNode(T value) {
             this(value, null, null);
         }
@@ -69,10 +65,6 @@ public class SimpleBinaryTree<T> implements BinaryTree<T> {
     @Override
     public TreeNode<T> getRoot() {
         return root;
-    }
-
-    public void clear() {
-        root = null;
     }
 
     private T fromStr(String s) throws Exception {
