@@ -79,38 +79,37 @@ public class MainForm extends JFrame {
     }
 /*
 1 (2 (3 (4), 5 (1 (2 (3 (4), 5 (, 9 (, 2 (, 3)))), 3 (, 4 (5, 6))), 9 (, 2 (, 3)))), 3 (, 4 (5, 6)))
+1 (2 (, 5 (1 (2 (, 5 (, 9 (, 2 (, 3)))), 3 (, 4 (5, 6))), 9 (, 2 (, 3)))), 3 (, 4 (5, 6)))
+1 (2, 3 (4 (6, 7), 5))
 */
     private void findHeightOfNode(SimpleBinaryTree<Integer>.SimpleTreeNode node, Height height) {
-
         if (node != null) {
             node.value = 0;
-            int valueToCompare = 0;
 
             if (node.right == null && node.left == null) {
                 height.height = 0;
-            }
+            } else {
 
-            if (node.left != null) {
-                findHeightOfNode(node.left, height);
-                height.height++;
-                if (valueToCompare < height.height) {
-                    valueToCompare = height.height;
+                if (node.left != null) {
+                    findHeightOfNode(node.left, height);
+                    height.height++;
+
+                    if (height.height >= node.value) {
+                        node.value = height.height;
+                    }
+                }
+
+                if (node.right != null) {
+                    findHeightOfNode(node.right, height);
+                    height.height++;
+
+                    if (height.height >= node.value) {
+                        node.value = height.height;
+                    } else {
+                        height.height = node.value;
+                    }
                 }
             }
-
-            if (node.right != null) {
-                findHeightOfNode(node.right, height);
-                height.height++;
-                if (valueToCompare < height.height) {
-                    valueToCompare = height.height;
-                }
-            }
-
-            if (valueToCompare > node.value) {
-                node.value = valueToCompare;
-            }
-
-
-        }
+       }
     }
 }
